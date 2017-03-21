@@ -1,0 +1,5 @@
+name: RealmCore
+version: 0.1
+author: Jed Palmer
+main: co.uk.jedpalmer.realmcore.RealmCore
+depend: []
