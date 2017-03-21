@@ -17,7 +17,7 @@ public class ChatListener implements Listener {
     Plugin plugin;
     PlayerChat realmChat;
     FileConfiguration config;
-    CooldownManager cooldown = new CooldownManager();
+    CooldownManager<ChatTypes> cooldown = new CooldownManager<ChatTypes>();
 
 
     /**
