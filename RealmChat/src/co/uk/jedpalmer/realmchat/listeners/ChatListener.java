@@ -1,7 +1,7 @@
 package co.uk.jedpalmer.realmchat.listeners;
 
 import co.uk.jedpalmer.realmchat.chat.PlayerChat;
-import co.uk.jedpalmer.realmchat.chat.Types;
+import co.uk.jedpalmer.realmchat.chat.ChatTypes;
 import co.uk.jedpalmer.realmcore.cooldown.CooldownManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -31,10 +31,10 @@ public class ChatListener implements Listener {
         realmChat = new PlayerChat(plugin);
 
         //Populate the cooldownManager with TYPES
-        cooldown.addCooldownType(Types.GLOBAL);
-        cooldown.addCooldownType(Types.TALK);
-        cooldown.addCooldownType(Types.WHISPER);
-        cooldown.addCooldownType(Types.SHOUT);
+        cooldown.addCooldownType(ChatTypes.GLOBAL);
+        cooldown.addCooldownType(ChatTypes.TALK);
+        cooldown.addCooldownType(ChatTypes.WHISPER);
+        cooldown.addCooldownType(ChatTypes.SHOUT);
     }
 
     /**
@@ -58,17 +58,17 @@ public class ChatListener implements Listener {
                 return;
             }
 
-            if (!cooldown.isCooldown(Types.SHOUT, sender)) {
+            if (!cooldown.isCooldown(ChatTypes.SHOUT, sender)) {
                 //Can send the message
 
                 for (Player receiver : Bukkit.getOnlinePlayers()) {
-                    if (realmChat.sendMessage(message, sender, receiver, Types.SHOUT)) {
+                    if (realmChat.sendMessage(message, sender, receiver, ChatTypes.SHOUT)) {
                         heard = true;
                     }
                 }
 
                 //Update cooldown
-                cooldown.addCooldown(Types.SHOUT, sender, config.getInt("chat.range.shout.cooldown"));
+                cooldown.addCooldown(ChatTypes.SHOUT, sender, config.getInt("chat.range.shout.cooldown"));
 
                 //Alert player if no one heard them
                 if (!heard) {
@@ -80,7 +80,7 @@ public class ChatListener implements Listener {
                 event.setCancelled(true);
 
             } else {
-                sender.sendRawMessage(ChatColor.RED + "You cannot shout for " + cooldown.printCooldown(Types.SHOUT, sender));
+                sender.sendRawMessage(ChatColor.RED + "You cannot shout for " + cooldown.printCooldown(ChatTypes.SHOUT, sender));
                 event.setCancelled(true);
             }
 
@@ -95,17 +95,17 @@ public class ChatListener implements Listener {
                 return;
             }
 
-            if (!cooldown.isCooldown(Types.WHISPER, sender)) {
+            if (!cooldown.isCooldown(ChatTypes.WHISPER, sender)) {
                 //Can send the message
 
                 for (Player receiver : Bukkit.getOnlinePlayers()) {
-                    if (realmChat.sendMessage(message, sender, receiver, Types.WHISPER)) {
+                    if (realmChat.sendMessage(message, sender, receiver, ChatTypes.WHISPER)) {
                         heard = true;
                     }
                 }
 
                 //Update cooldown
-                cooldown.addCooldown(Types.SHOUT, sender, config.getInt("chat.range.shout.cooldown"));
+                cooldown.addCooldown(ChatTypes.SHOUT, sender, config.getInt("chat.range.shout.cooldown"));
 
                 //Alert player if no one heard them
                 if (!heard) {
@@ -117,7 +117,7 @@ public class ChatListener implements Listener {
                 event.setCancelled(true);
 
             } else {
-                sender.sendRawMessage(ChatColor.RED + "You cannot whisper for " + cooldown.printCooldown(Types.WHISPER, sender));
+                sender.sendRawMessage(ChatColor.RED + "You cannot whisper for " + cooldown.printCooldown(ChatTypes.WHISPER, sender));
                 event.setCancelled(true);
             }
 
@@ -131,13 +131,13 @@ public class ChatListener implements Listener {
                 return;
             }
 
-            if (!cooldown.isCooldown(Types.GLOBAL, sender)) {
+            if (!cooldown.isCooldown(ChatTypes.GLOBAL, sender)) {
                 //Can send the message
 
                 realmChat.sendGlobalMessage(message, sender);
 
                 //Update cooldown
-                cooldown.addCooldown(Types.GLOBAL, sender, config.getInt("chat.range.global.cooldown"));
+                cooldown.addCooldown(ChatTypes.GLOBAL, sender, config.getInt("chat.range.global.cooldown"));
 
 
                 //Log chat
@@ -145,24 +145,24 @@ public class ChatListener implements Listener {
                 event.setCancelled(true);
 
             } else {
-                sender.sendRawMessage(ChatColor.RED + "You cannot speak in global for " + cooldown.printCooldown(Types.GLOBAL, sender));
+                sender.sendRawMessage(ChatColor.RED + "You cannot speak in global for " + cooldown.printCooldown(ChatTypes.GLOBAL, sender));
                 event.setCancelled(true);
             }
 
 
         } else {
 
-            if (!cooldown.isCooldown(Types.TALK, sender)) {
+            if (!cooldown.isCooldown(ChatTypes.TALK, sender)) {
                 //Can send the message
 
                 for (Player receiver : Bukkit.getOnlinePlayers()) {
-                    if (realmChat.sendMessage(message, sender, receiver, Types.TALK)) {
+                    if (realmChat.sendMessage(message, sender, receiver, ChatTypes.TALK)) {
                         heard = true;
                     }
                 }
 
                 //Update cooldown
-                cooldown.addCooldown(Types.TALK, sender, config.getInt("chat.range.talk.cooldown"));
+                cooldown.addCooldown(ChatTypes.TALK, sender, config.getInt("chat.range.talk.cooldown"));
 
                 //Alert player if no one heard them
                 if (!heard) {
@@ -174,7 +174,7 @@ public class ChatListener implements Listener {
                 event.setCancelled(true);
             }  else {
 
-                sender.sendRawMessage(ChatColor.RED + "You cannot speak for " + cooldown.printCooldown(Types.TALK, sender));
+                sender.sendRawMessage(ChatColor.RED + "You cannot speak for " + cooldown.printCooldown(ChatTypes.TALK, sender));
                 event.setCancelled(true);
             }
         }

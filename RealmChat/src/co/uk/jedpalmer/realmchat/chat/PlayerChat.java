@@ -29,9 +29,9 @@ public class PlayerChat {
      * Type dictates range for normal and fuzzy
      * Returns true if the message was received by another player (not the sender)
      */
-    public boolean sendMessage(String message, Player sender, Player receiver, Types type) {
+    public boolean sendMessage(String message, Player sender, Player receiver, ChatTypes type) {
 
-        if (type == Types.SHOUT) {
+        if (type == ChatTypes.SHOUT) {
             //Is receiver the player?
             if (receiver.equals(sender)) {
                 receiver.sendRawMessage(ChatColor.DARK_RED + "" + ChatColor.BOLD + sender.getName() + ChatColor.DARK_RED + " - " + ChatColor.RED + message.toUpperCase());
@@ -49,7 +49,7 @@ public class PlayerChat {
                 return true;
             }
 
-        } else if (type == Types.TALK) {
+        } else if (type == ChatTypes.TALK) {
             //Is receiver the player?
             if (receiver.equals(sender)) {
                 receiver.sendRawMessage(ChatColor.WHITE + sender.getName() + " - " + ChatColor.GRAY + message);
@@ -67,7 +67,7 @@ public class PlayerChat {
                 return true;
             }
 
-        } else if (type == Types.WHISPER) {
+        } else if (type == ChatTypes.WHISPER) {
             //Is receiver the player?
             if (receiver.equals(sender)) {
                 receiver.sendRawMessage(ChatColor.GRAY + sender.getName() + " - " + ChatColor.GRAY + message);
