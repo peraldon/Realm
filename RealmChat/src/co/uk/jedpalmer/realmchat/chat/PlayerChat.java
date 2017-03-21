@@ -12,8 +12,8 @@ import org.bukkit.plugin.Plugin;
  * Manages the range of chats, and visual appearance of them
  */
 public class PlayerChat {
-    Plugin plugin;
-    FileConfiguration config;
+    private Plugin plugin;
+    private FileConfiguration config;
 
     /**
      * Initialization of PlayerChat

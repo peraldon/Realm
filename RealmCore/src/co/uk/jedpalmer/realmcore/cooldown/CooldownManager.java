@@ -2,7 +2,6 @@ package co.uk.jedpalmer.realmcore.cooldown;
 
 import org.bukkit.entity.Player;
 
-import java.util.EnumMap;
 import java.util.HashMap;
 
 
@@ -10,16 +9,16 @@ import java.util.HashMap;
  * Manages the storing of cooldowns for a player
  * Supports multiple types (ie, multiple chat channels)
  */
-public class CooldownManager <e extends Enum>{
-    HashMap<e, HashMap<Player, Long>> cooldownMap = new HashMap<e, HashMap<Player, Long>>();
-    Cooldowns cooldowns = new Cooldowns();
+public class CooldownManager <E extends Enum>{
+    private HashMap<E, HashMap<Player, Long>> cooldownMap = new HashMap<E, HashMap<Player, Long>>();
+    private Cooldowns cooldowns = new Cooldowns();
 
     /**
      * Adds a cooldown for a player of a specific type and time
      * Will replace an existing cooldown
      * Returns true if successful, or false if not
      */
-    public boolean addCooldown(e type, Player player, int time){
+    public boolean addCooldown(E type, Player player, int time){
         if(cooldownMap.containsKey(type)){
             cooldownMap.get(type).put(player, System.currentTimeMillis() + (time * 1000));
             return true;
@@ -33,7 +32,7 @@ public class CooldownManager <e extends Enum>{
      * Returns false if there isn't a cooldown to reduce, otherwise
      * returns true
      */
-    public boolean reduceCooldown(e type, Player player, int time){
+    public boolean reduceCooldown(E type, Player player, int time){
         if(isCooldown(type, player)){
             cooldownMap.get(type).put(player, cooldownMap.get(type).get(player) - (time * 1000));
             return true;
@@ -47,7 +46,7 @@ public class CooldownManager <e extends Enum>{
      * Returns false if there isn't a cooldown to remove, otherwise
      * returns true
      */
-    public boolean removeCooldown(e type, Player player){
+    public boolean removeCooldown(E type, Player player){
         if(isCooldown(type, player)){
             cooldownMap.get(type).remove(player);
             return true;
@@ -60,7 +59,7 @@ public class CooldownManager <e extends Enum>{
      * Prints out a cooldown of a player and type
      * Outputs a string to send to console or player
      */
-    public String printCooldown(e type, Player player){
+    public String printCooldown(E type, Player player){
         if(isCooldown(type, player)) {
             return cooldowns.timeLeftString(System.currentTimeMillis(), cooldownMap.get(type).get(player));
         }
@@ -71,7 +70,7 @@ public class CooldownManager <e extends Enum>{
      * Prints out a cooldown of a player and type
      * Outputs an int array for editing
      */
-    public int[] getCooldown(e type, Player player){
+    public int[] getCooldown(E type, Player player){
         if(isCooldown(type, player)) {
             return cooldowns.timeLeft(System.currentTimeMillis(), cooldownMap.get(type).get(player));
         }
@@ -83,7 +82,7 @@ public class CooldownManager <e extends Enum>{
      * True if they do, otherwise false
      * Will also remove the entry on the Hashmap if there is no longer a cooldown
      */
-    public boolean isCooldown(e type, Player player){
+    public boolean isCooldown(E type, Player player){
         if(cooldownMap.get(type).containsKey(player)){
             if(System.currentTimeMillis() > cooldownMap.get(type).get(player)){
                 cooldownMap.get(type).remove(player);
@@ -101,7 +100,7 @@ public class CooldownManager <e extends Enum>{
      * Adds a new type of Cooldown, dependant on existing enum types
      * Returns true if successfully added, otherwise returns false
      */
-    public boolean addCooldownType(e type){
+    public boolean addCooldownType(E type){
         if(!cooldownMap.containsKey(type)){
             cooldownMap.put(type, new HashMap<Player, Long>());
             return true;
@@ -115,7 +114,7 @@ public class CooldownManager <e extends Enum>{
      * Removes an old type of Cooldown, dependant on existing enum types
      * Returns true if successfully deleted, otherwise returns false
      */
-    public boolean removeCooldownType(e type){
+    public boolean removeCooldownType(E type){
         if(cooldownMap.containsKey(type)){
             cooldownMap.remove(type);
             return true;

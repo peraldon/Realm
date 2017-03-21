@@ -10,8 +10,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class RealmChat extends JavaPlugin{
 
     //Initilisation of base uses
-    final PluginManager manager = getServer().getPluginManager();
-    final FileConfiguration config = this.getConfig();
+    private final PluginManager manager = getServer().getPluginManager();
+    private final FileConfiguration config = this.getConfig();
 
     @Override
     public void onEnable(){

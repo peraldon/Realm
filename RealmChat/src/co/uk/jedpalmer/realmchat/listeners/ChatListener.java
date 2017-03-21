@@ -14,10 +14,10 @@ import org.bukkit.plugin.Plugin;
 
 
 public class ChatListener implements Listener {
-    Plugin plugin;
-    PlayerChat realmChat;
-    FileConfiguration config;
-    CooldownManager<ChatTypes> cooldown = new CooldownManager<ChatTypes>();
+    private Plugin plugin;
+    private PlayerChat realmChat;
+    private FileConfiguration config;
+    private CooldownManager<ChatTypes> cooldown = new CooldownManager<ChatTypes>();
 
 
     /**

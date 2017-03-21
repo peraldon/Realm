@@ -13,9 +13,9 @@ import org.bukkit.plugin.Plugin;
  * Listens to general player activity
  */
 public class PlayerListener implements Listener{
-    Plugin plugin;
+    private Plugin plugin;
 
-    ServerChat serverChat = new ServerChat();
+    private ServerChat serverChat = new ServerChat();
 
     //Initialisation
     public PlayerListener(Plugin instance){
