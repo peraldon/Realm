@@ -32,6 +32,8 @@ public class PlayerListener implements Listener{
 
         //Let's stop the join message
         event.setJoinMessage("");
+
+
     }
 
     /**

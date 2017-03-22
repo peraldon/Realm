@@ -1,9 +1,9 @@
-package co.uk.jedpalmer.realmcore.cooldown;
+package co.uk.jedpalmer.realmcore.utils;
 
 /**
  * Outputs cooldown utilities such as time left
  */
-public class Cooldowns {
+public class TimeComparator {
 
 
     /**

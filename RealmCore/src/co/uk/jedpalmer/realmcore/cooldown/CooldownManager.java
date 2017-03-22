@@ -1,5 +1,6 @@
 package co.uk.jedpalmer.realmcore.cooldown;
 
+import co.uk.jedpalmer.realmcore.utils.TimeComparator;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -11,7 +12,7 @@ import java.util.HashMap;
  */
 public class CooldownManager <E extends Enum>{
     private HashMap<E, HashMap<Player, Long>> cooldownMap = new HashMap<E, HashMap<Player, Long>>();
-    private Cooldowns cooldowns = new Cooldowns();
+    private TimeComparator cooldowns = new TimeComparator();
 
     /**
      * Adds a cooldown for a player of a specific type and time
