@@ -76,9 +76,6 @@ public class FileAccessor {
             this.reloadData();
         }
 
-        System.out.println("base uuid: " + data.get("d666eea6-29c2-457e-9fd0-560f332e877e"));
-        System.out.println("uuid.kills: " + data.get("d666eea6-29c2-457e-9fd0-560f332e877e.kills"));
-
         return data;
     }
 
