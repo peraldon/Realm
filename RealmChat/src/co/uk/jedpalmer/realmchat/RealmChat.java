@@ -2,8 +2,7 @@ package co.uk.jedpalmer.realmchat;
 
 import co.uk.jedpalmer.realmchat.listeners.ChatListener;
 import co.uk.jedpalmer.realmchat.listeners.PlayerListener;
-import co.uk.jedpalmer.realmcore.player.PlayerManager;
-import co.uk.jedpalmer.realmcore.utils.FileAccesser;
+import co.uk.jedpalmer.realmcore.utils.FileAccessor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -12,7 +11,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class RealmChat extends JavaPlugin{
     Plugin plugin;
-    FileAccesser data;
+    FileAccessor data;
 
     //Initilisation of base uses
     private final PluginManager manager = getServer().getPluginManager();

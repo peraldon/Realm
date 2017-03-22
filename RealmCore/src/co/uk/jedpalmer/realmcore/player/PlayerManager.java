@@ -7,7 +7,7 @@ import org.bukkit.plugin.Plugin;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PlayerManager {
+public class PlayerManager  <P extends Player>{
     private Plugin plugin;
     private FileAccessor data;
     private Map<String, Map<String, Long>> playerMap = new HashMap<String, Map<String, Long>>();
@@ -23,7 +23,7 @@ public class PlayerManager {
     /**
      * Returns true if the player is loaded on the server
      */
-    public boolean isLoaded(Player player){
+    public boolean isLoaded(P player){
 
         if(playerMap.containsKey(player.getUniqueId().toString())){
             return true;
@@ -35,7 +35,7 @@ public class PlayerManager {
     /**
      * Returns true upon the player data of a specific data is loaded, otherwise returns false
      */
-    public boolean loadPlayer(Player player){
+    public boolean loadPlayer(P player){
 
         //Is the player already loaded?
         if(playerMap.containsKey(player.getUniqueId().toString())){
@@ -60,7 +60,7 @@ public class PlayerManager {
     /**
      * Returns a specific player's data
      */
-    public Map<String, Long> getPlayer(Player player){
+    public Map<String, Long> getPlayer(P player){
 
         if(playerMap.containsKey(player.getUniqueId().toString())){
             //Player is safe to send
@@ -75,7 +75,7 @@ public class PlayerManager {
      * Saves a specific player, then writes new data to disk
      * Returns true if successful
      */
-    public boolean savePlayer(Player player){
+    public boolean savePlayer(P player){
 
         if(playerMap.containsKey(player.getUniqueId().toString())){
             //Player is safe to save
@@ -94,7 +94,7 @@ public class PlayerManager {
     /**
      * Returns true if a specific player is successfully unloaded from the server
      */
-    public boolean unloadPlayer(Player player){
+    public boolean unloadPlayer(P player){
         if(playerMap.containsKey(player.getUniqueId().toString())){
             //Player is safe to unload
             playerMap.remove(player.getUniqueId().toString());

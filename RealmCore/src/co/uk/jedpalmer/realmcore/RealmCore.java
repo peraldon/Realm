@@ -9,9 +9,9 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class RealmCore extends JavaPlugin{
-    Plugin plugin;
-    FileAccessor data;
-    PlayerManager playerManager;
+    private Plugin plugin;
+    private FileAccessor data;
+    private PlayerManager playerManager;
 
     @Override
     public void onEnable(){
@@ -21,12 +21,14 @@ public class RealmCore extends JavaPlugin{
 
         playerManager = new PlayerManager(plugin, data);
 
+        //Register listeners
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerListener(playerManager), this);
 
     }
 
     @Override
     public void onDisable(){
+        //Save everyone currently online
         for(Player player : Bukkit.getOnlinePlayers()){
             playerManager.savePlayer(player);
         }
