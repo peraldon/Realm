@@ -1,0 +1,56 @@
+package co.uk.jedpalmer.realm.listeners;
+
+import co.uk.jedpalmer.realm.chat.ServerChat;
+import co.uk.jedpalmer.realm.player.PlayerManager;
+import org.bukkit.ChatColor;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerAchievementAwardedEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+
+public class PlayerListener implements Listener{
+
+    private PlayerManager playerManager;
+
+    private ServerChat serverChat = new ServerChat();
+
+    public PlayerListener(PlayerManager playerManager){
+        this.playerManager = playerManager;
+    }
+
+    /**
+     * Loads the player's profile on join
+     */
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event){
+        playerManager.loadPlayer(event.getPlayer());
+        playerManager.setPlayerAttribute(event.getPlayer(), "lastLogin", System.currentTimeMillis());
+
+        serverChat.sendLocalisedServerMessage(ChatColor.GRAY + "" + ChatColor.ITALIC + event.getPlayer().getName() + " has woken up nearby.", event.getPlayer().getLocation(), 20);
+
+        //Let's stop the join message
+        event.setJoinMessage("");
+    }
+
+    /**
+     * Saves and then unloads the player on quit
+     */
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event){
+        playerManager.increasePlayerAttribute(event.getPlayer(), "totalPlaytime", System.currentTimeMillis() - playerManager.getPlayerAttribute(event.getPlayer(), "totalPlaytime"));
+        playerManager.savePlayer(event.getPlayer());
+        playerManager.unloadPlayer(event.getPlayer());
+
+        serverChat.sendLocalisedServerMessage(ChatColor.GRAY + "" + ChatColor.ITALIC + event.getPlayer().getName() + " has gone to sleep.", event.getPlayer().getLocation(), 20);
+
+        //Let's stop the leave message
+        event.setQuitMessage("");
+
+    }
+
+    @EventHandler
+    public void onPlayerAchievementAwarded(PlayerAchievementAwardedEvent event){
+        event.setCancelled(true);
+    }
+}
