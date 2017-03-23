@@ -11,8 +11,15 @@ import java.util.HashMap;
  * Supports multiple types (ie, multiple chat channels)
  */
 public class CooldownManager <E extends Enum>{
-    private HashMap<E, HashMap<Player, Long>> cooldownMap = new HashMap<E, HashMap<Player, Long>>();
-    private TimeComparator cooldowns = new TimeComparator();
+    private HashMap<E, HashMap<Player, Long>> cooldownMap;
+    private TimeComparator cooldowns;
+
+
+
+    public CooldownManager(){
+        this.cooldownMap = new HashMap<E, HashMap<Player, Long>>();
+        this.cooldowns = new TimeComparator();
+    }
 
     /**
      * Adds a cooldown for a player of a specific type and time

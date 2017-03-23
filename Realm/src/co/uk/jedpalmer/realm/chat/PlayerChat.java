@@ -18,16 +18,17 @@ public class PlayerChat {
     private FileConfiguration config;
     private FileAccessor data;
 
-    private Map<String, ChatChannel> chatChannels = new HashMap<String, ChatChannel>();
+    private Map<String, ChatChannel> chatChannels;
 
 
     /**
      * Initialization of PlayerChat
      */
     public PlayerChat (Plugin instance){
-        plugin = instance;
-        config = plugin.getConfig();
-        data = new FileAccessor(instance, "chats.yml");
+        this.plugin = instance;
+        this.config = plugin.getConfig();
+        this.data = new FileAccessor(instance, "chats.yml");
+        this.chatChannels = new HashMap<String, ChatChannel>();
 
         data.setupFile();
     }

@@ -23,11 +23,11 @@ public class Realm extends JavaPlugin{
     @Override
     public void onEnable(){
         //Populate base objects
-        plugin = this;
-        data = new FileAccessor(plugin, "playerdata.yml");
-        config = plugin.getConfig();
-        playerManager = new PlayerManager(data);
-        manager =  getServer().getPluginManager();
+        this.plugin = this;
+        this.data = new FileAccessor(plugin, "playerdata.yml");
+        this.config = plugin.getConfig();
+        this.playerManager = new PlayerManager(data);
+        this.manager =  getServer().getPluginManager();
 
         //Register listeners
         manager.registerEvents(new PlayerListener(playerManager), this);

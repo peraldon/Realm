@@ -13,12 +13,15 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class PlayerListener implements Listener{
     private PlayerManager playerManager;
-    private ServerChat serverChat = new ServerChat();
-    private ReadableDate readableDate = new ReadableDate();
-    private ReadableDuration readableDuration = new ReadableDuration();
+    private ServerChat serverChat;
+    private ReadableDate readableDate;
+    private ReadableDuration readableDuration;
 
     public PlayerListener(PlayerManager playerManager){
         this.playerManager = playerManager;
+        this.serverChat = new ServerChat();
+        this.readableDate = new ReadableDate();
+        this.readableDuration = new ReadableDuration();
     }
 
     /**

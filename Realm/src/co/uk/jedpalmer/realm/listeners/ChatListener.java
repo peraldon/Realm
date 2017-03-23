@@ -17,18 +17,18 @@ public class ChatListener implements Listener {
     private Plugin plugin;
     private PlayerChat realmChat;
     private FileConfiguration config;
-    private CooldownManager<ChatTypes> cooldown = new CooldownManager<ChatTypes>();
+    private CooldownManager<ChatTypes> cooldown;
 
 
     /**
      * Initilisation of ChatListener
      */
     public ChatListener(Plugin instance) {
-        plugin = instance;
 
-        config = plugin.getConfig();
-
-        realmChat = new PlayerChat(plugin);
+        this.plugin = instance;
+        this.config = plugin.getConfig();
+        this.cooldown = new CooldownManager<ChatTypes>();
+        this.realmChat = new PlayerChat(plugin);
 
         //Populate the cooldownManager with TYPES
         cooldown.addCooldownType(ChatTypes.GLOBAL);

@@ -11,10 +11,10 @@ import java.util.Set;
 
 public class FileAccessor {
     private Plugin plugin;
-    private FileConfiguration data = null;
-    private File dataFile = null;
-    private File dataFolder = null;
-    private String fileName = null;
+    private FileConfiguration data;
+    private File dataFile;
+    private File dataFolder;
+    private String fileName;
 
     /**
      * Initializes FileAccessor for a specific file
@@ -23,8 +23,7 @@ public class FileAccessor {
         this.plugin = plugin;
         this.fileName = fileName;
         this.dataFolder = plugin.getDataFolder();
-
-        dataFile = new File(dataFolder, fileName);
+        this.dataFile = new File(dataFolder, fileName);
 
         setupFile();
 

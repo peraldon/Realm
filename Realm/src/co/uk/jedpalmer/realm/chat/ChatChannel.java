@@ -7,11 +7,13 @@ import java.util.List;
 import java.util.Set;
 
 public class ChatChannel {
-    List<Integer> range = new ArrayList<Integer>();
-    List<String> visual = new ArrayList<String>();
+    List<Integer> range;
+    List<String> visual;
     char symbol;
 
     public boolean ChatChannel(FileAccessor data, String channelName){
+        this.range = new ArrayList<Integer>();
+        this.visual = new ArrayList<String>();
 
         System.out.println("Loading channel " + channelName);
 

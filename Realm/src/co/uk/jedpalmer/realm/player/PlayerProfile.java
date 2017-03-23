@@ -9,12 +9,13 @@ import java.util.Map;
 import java.util.Set;
 
 public class PlayerProfile {
-    private Map<String, Long> playerProfile = new HashMap<String, Long>();
+    private Map<String, Long> playerProfile;
 
     /**
      * Starts a new PlayerProfile
      */
     public PlayerProfile (boolean isNew, FileAccessor data, Player player){
+        playerProfile = new HashMap<String, Long>();
 
         if(isNew){
             //Create new player
