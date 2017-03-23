@@ -1,11 +1,13 @@
 package co.uk.jedpalmer.realm.chat;
 
+import co.uk.jedpalmer.realm.utils.FileAccessor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+import java.util.*;
 
 /**
  * Deals with PlayerChat channels
@@ -14,6 +16,10 @@ import org.bukkit.plugin.Plugin;
 public class PlayerChat {
     private Plugin plugin;
     private FileConfiguration config;
+    private FileAccessor data;
+
+    private Map<String, ChatChannel> chatChannels = new HashMap<String, ChatChannel>();
+
 
     /**
      * Initialization of PlayerChat
@@ -21,6 +27,21 @@ public class PlayerChat {
     public PlayerChat (Plugin instance){
         plugin = instance;
         config = plugin.getConfig();
+        data = new FileAccessor(instance, "chats.yml");
+
+        data.setupFile();
+    }
+
+    public void loadChatChannels(){
+        Set<String> channelNames = data.getConfig().getKeys(false);
+        List<Integer> range = new ArrayList<Integer>();
+        List<String> visual = new ArrayList<String>();
+        char symbol;
+
+
+
+        //if no chat channels create default content then load
+
     }
 
 
@@ -29,7 +50,7 @@ public class PlayerChat {
      * Type dictates range for normal and fuzzy
      * Returns true if the message was received by another player (not the sender)
      */
-    public boolean sendMessage(String message, Player sender, Player receiver, ChatTypes type) {
+    public boolean sendLocalisedMessage(String message, Player sender, Player receiver, ChatTypes type) {
 
         if (type == ChatTypes.SHOUT) {
             //Is receiver the player?

@@ -62,7 +62,7 @@ public class ChatListener implements Listener {
                 //Can send the message
 
                 for (Player receiver : Bukkit.getOnlinePlayers()) {
-                    if (realmChat.sendMessage(message, sender, receiver, ChatTypes.SHOUT)) {
+                    if (realmChat.sendLocalisedMessage(message, sender, receiver, ChatTypes.SHOUT)) {
                         heard = true;
                     }
                 }
@@ -99,7 +99,7 @@ public class ChatListener implements Listener {
                 //Can send the message
 
                 for (Player receiver : Bukkit.getOnlinePlayers()) {
-                    if (realmChat.sendMessage(message, sender, receiver, ChatTypes.WHISPER)) {
+                    if (realmChat.sendLocalisedMessage(message, sender, receiver, ChatTypes.WHISPER)) {
                         heard = true;
                     }
                 }
@@ -156,7 +156,7 @@ public class ChatListener implements Listener {
                 //Can send the message
 
                 for (Player receiver : Bukkit.getOnlinePlayers()) {
-                    if (realmChat.sendMessage(message, sender, receiver, ChatTypes.TALK)) {
+                    if (realmChat.sendLocalisedMessage(message, sender, receiver, ChatTypes.TALK)) {
                         heard = true;
                     }
                 }

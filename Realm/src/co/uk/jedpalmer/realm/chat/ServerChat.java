@@ -28,4 +28,8 @@ public class ServerChat {
 
         return seen;
     }
+
+    public void sendPlayerMessage(String message, Player player){
+        player.sendRawMessage(message);
+    }
 }

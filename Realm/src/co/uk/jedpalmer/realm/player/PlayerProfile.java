@@ -18,9 +18,11 @@ public class PlayerProfile {
 
         if(isNew){
             //Create new player
+            System.out.println("Creating new profile for " + player.getName());
+
             long newAttribute = 0;
-            playerProfile.put("lastLogin", newAttribute);
-            playerProfile.put("totalPlaytime", newAttribute);
+            playerProfile.put(".lastLogin", newAttribute);
+            playerProfile.put(".totalPlaytime", newAttribute);
 
         } else{
             //Load player
@@ -46,8 +48,28 @@ public class PlayerProfile {
         return playerProfile;
     }
 
+    /**
+     * Returns a specific attribute
+     */
+    public Long getPlayerAttribute(String key){
+        return playerProfile.get(key);
+    }
 
 
+    /**
+     * Returns true if player has this attribute defined already
+     */
+    public boolean hasAttribute(String key){
+        return (playerProfile.containsKey(key));
+    }
+
+    /**
+     * Returns a player profile keys, as a string list
+     */
+    public Set<String> getPlayerAttributes(){
+
+        return getPlayerProfile().keySet();
+    }
 
 
     /**

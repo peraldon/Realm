@@ -26,7 +26,7 @@ public class Realm extends JavaPlugin{
         plugin = this;
         data = new FileAccessor(plugin, "playerdata.yml");
         config = plugin.getConfig();
-        playerManager = new PlayerManager(plugin, data);
+        playerManager = new PlayerManager(data);
         manager =  getServer().getPluginManager();
 
         //Register listeners
@@ -52,6 +52,7 @@ public class Realm extends JavaPlugin{
     public void onDisable(){
         //Save everyone currently online
         for(Player player : Bukkit.getOnlinePlayers()){
+            playerManager.increasePlayerAttribute(player, "totalPlaytime", System.currentTimeMillis() - playerManager.getPlayerAttribute(player, "lastLogin"));
             playerManager.savePlayer(player);
         }
     }

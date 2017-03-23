@@ -1,7 +1,6 @@
 package co.uk.jedpalmer.realm.player;
 
 import co.uk.jedpalmer.realm.utils.FileAccessor;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -11,15 +10,13 @@ import java.util.List;
 import java.util.Map;
 
 public class PlayerManager  <P extends Player>{
-    private Plugin plugin;
     private FileAccessor data;
-    private Map<String, Map<String, Long>> playerMap = new HashMap<String, Map<String, Long>>();
+    private Map<Player, PlayerProfile> playerMap = new HashMap<Player, PlayerProfile>();
 
     /**
      * Initialises the playerManager
      */
-    public PlayerManager(Plugin plugin, FileAccessor data){
-        this.plugin = plugin;
+    public PlayerManager(FileAccessor data){
         this.data = data;
     }
 
@@ -27,12 +24,7 @@ public class PlayerManager  <P extends Player>{
      * Returns true if the player is loaded on the server
      */
     public boolean isLoaded(P player){
-
-        if(playerMap.containsKey(player.getUniqueId().toString())){
-            return true;
-        } else {
-            return false;
-        }
+        return playerMap.containsKey(player);
     }
 
     /**
@@ -41,7 +33,7 @@ public class PlayerManager  <P extends Player>{
     public boolean loadPlayer(P player){
 
         //Is the player already loaded?
-        if(playerMap.containsKey(player.getUniqueId().toString())){
+        if(playerMap.containsKey(player)){
             System.out.println("Tried to load player " + player.getName() + "'s data, even though it's already loaded!");
             return false;
         } else {
@@ -49,12 +41,14 @@ public class PlayerManager  <P extends Player>{
             if(data.getConfig().contains(player.getUniqueId().toString())){
                 //Load player
                 PlayerProfile playerProfile = new PlayerProfile(false, data, player);
-                playerMap.put(player.getUniqueId().toString(), playerProfile.getPlayerProfile());
+                playerMap.put(player, playerProfile);
+
                 return true;
             } else {
                 //Create player profile
                 PlayerProfile playerProfile = new PlayerProfile(true, data, player);
-                playerMap.put(player.getUniqueId().toString(), playerProfile.getPlayerProfile());
+                playerMap.put(player, playerProfile);
+
                 return true;
             }
         }
@@ -63,11 +57,11 @@ public class PlayerManager  <P extends Player>{
     /**
      * Returns a specific player's data
      */
-    public Map<String, Long> getPlayer(P player){
+    public PlayerProfile getPlayer(P player){
 
-        if(playerMap.containsKey(player.getUniqueId().toString())){
+        if(playerMap.containsKey(player)){
             //Player is safe to send
-            return playerMap.get(player.getUniqueId().toString());
+            return playerMap.get(player);
         } else {
             //Player isn't safe to send
             System.out.println("Tried to grab player " + player.getName() + "'s data, but it's not available");
@@ -79,10 +73,11 @@ public class PlayerManager  <P extends Player>{
      * Returns a specific player's attribute
      */
     public Long getPlayerAttribute(P player, String attribute){
+        attribute = "." + attribute;
 
-        if(playerMap.containsKey(player.getUniqueId().toString()) && getPlayer(player).containsKey(attribute)){
+        if(playerMap.containsKey(player) && getPlayer(player).getPlayerProfile().containsKey(attribute)){
             //PlayerAttribute is safe to send
-            return playerMap.get(player.getUniqueId().toString()).get(attribute);
+            return playerMap.get(player).getPlayerProfile().get(attribute);
         } else {
             //Player isn't safe to send
             System.out.println("Tried to grab player " + player.getName() + "'s attribute, but it's not available");
@@ -96,17 +91,22 @@ public class PlayerManager  <P extends Player>{
     public boolean savePlayer(P player){
         String uuid = player.getUniqueId().toString();
 
-        if(playerMap.containsKey(player.getUniqueId().toString())){
+        if(playerMap.containsKey(player)){
             //Player is safe to save
-            List<String> playerAttributes = new ArrayList<String>(getPlayer(player).keySet());
+            List<String> playerAttributes = new ArrayList<String>(getPlayer(player).getPlayerAttributes());
 
             System.out.println(player.getName() + " has " + playerAttributes.size() + " attributes to save.");
 
             for(int i = 0; playerAttributes.size() > i; i++){
-                data.getConfig().set(uuid + "." + playerAttributes.get(i), playerMap.get(uuid).get(playerAttributes.get(i)));
+                data.getConfig().set(uuid + "." + playerAttributes.get(i), playerMap.get(player).getPlayerAttribute(playerAttributes.get(i)));
             }
 
             data.saveData();
+
+            for(int i = 0; playerAttributes.size() > i; i++){
+                System.out.println("Saved " + uuid + "." + playerAttributes.get(i) + " as " + playerMap.get(player).getPlayerAttribute(playerAttributes.get(i)));
+            }
+
             return true;
         } else {
             //Player isn't safe to save
@@ -119,9 +119,9 @@ public class PlayerManager  <P extends Player>{
      * Returns true if a specific player is successfully unloaded from the server
      */
     public boolean unloadPlayer(P player){
-        if(playerMap.containsKey(player.getUniqueId().toString())){
+        if(playerMap.containsKey(player)){
             //Player is safe to unload
-            playerMap.remove(player.getUniqueId().toString());
+            playerMap.remove(player);
             return true;
         } else {
             //Player isn't safe to save
@@ -141,13 +141,14 @@ public class PlayerManager  <P extends Player>{
      * Sets a players attribute, returns false if it's a new attribute
      */
     public boolean setPlayerAttribute(P player, String attribute, Long number){
+        attribute = "." + attribute;
         if(playerMap.containsKey(player)){
-            if(playerMap.get(getPlayer(player)).containsKey(attribute)){
-                playerMap.get(getPlayer(player)).put(attribute, number);
+            if(playerMap.get(player).hasAttribute(attribute)){
+                playerMap.get(player).getPlayerProfile().put(attribute, number);
                 return true;
             } else {
-                playerMap.get(getPlayer(player)).put(attribute, number);
-                System.out.println("Failed to setPlayerAttribute as attribute isn't loaded");
+                playerMap.get(player).getPlayerProfile().put(attribute, number);
+                System.out.println("Just set an attribute that isn't loaded on the player");
                 return false;
             }
         } else {
@@ -160,11 +161,12 @@ public class PlayerManager  <P extends Player>{
      * Adds to a players attribute, returns false if it creates a new attribute
      */
     public boolean increasePlayerAttribute(P player, String attribute, Long number){
-        if(playerMap.get(getPlayer(player)).containsKey(attribute)){
-            playerMap.get(getPlayer(player)).put(attribute, playerMap.get(getPlayer(player)).get(attribute) + number);
+        attribute = "." + attribute;
+        if(playerMap.get(player).hasAttribute(attribute)){
+            playerMap.get(player).getPlayerProfile().put(attribute, playerMap.get(player).getPlayerAttribute(attribute) + number);
             return true;
         } else {
-            playerMap.get(getPlayer(player)).put(attribute, number);
+            playerMap.get(player).getPlayerProfile().put(attribute, number);
             return false;
         }
     }
@@ -173,13 +175,13 @@ public class PlayerManager  <P extends Player>{
      * Decreases a players attribute, returns false if it creates a new attribute
      */
     public boolean decreasePlayerAttribute(P player, String attribute, Long number){
-        if(playerMap.get(getPlayer(player)).containsKey(attribute)){
-            playerMap.get(getPlayer(player)).put(attribute, playerMap.get(getPlayer(player)).get(attribute) - number);
+        attribute = "." + attribute;
+        if(playerMap.get(player).hasAttribute(attribute)){
+            playerMap.get(player).getPlayerProfile().put(attribute, playerMap.get(player).getPlayerAttribute(attribute) - number);
             return true;
         } else {
-            playerMap.get(getPlayer(player)).put(attribute, number - number);
+            playerMap.get(player).getPlayerProfile().put(attribute, number);
             return false;
         }
     }
-
 }
