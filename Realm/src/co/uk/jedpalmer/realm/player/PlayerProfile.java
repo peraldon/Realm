@@ -31,7 +31,7 @@ public class PlayerProfile {
             String uuid = player.getUniqueId().toString();
 
             //Get a list of all saved attributes
-            Set<String> playerAttributes = data.getKeys(uuid, false);
+            Set<String> playerAttributes = data.getKeys(uuid, false, false);
 
             //Iterate through them and load all to memory
             for(String key : playerAttributes){

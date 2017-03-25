@@ -6,7 +6,9 @@ import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class FileAccessor {
@@ -45,9 +47,9 @@ public class FileAccessor {
         //Try to make the file if it doesn't exist
         try {
             if(dataFile.createNewFile()) {
-                System.out.println("Created file");
+                System.out.println("Created " + dataFile.getName());
             } else {
-                System.out.println("File already exists!");
+                System.out.println(dataFile.getName() + " already exists!");
             }
         } catch (IOException e){
             e.printStackTrace();
@@ -80,6 +82,7 @@ public class FileAccessor {
         return data;
     }
 
+
     /**
      * Saves initial base data to drive
      * Returns true if successful
@@ -90,7 +93,7 @@ public class FileAccessor {
             try {
                 data.save(dataFile);
 
-                System.out.println("Saved data");
+                System.out.println("Saved " + dataFile.getName());
 
             } catch (IOException e){
                 e.printStackTrace();
@@ -111,7 +114,7 @@ public class FileAccessor {
            try {
                data.save(dataFile);
 
-               System.out.println("Saved data");
+               System.out.println("Saved " + dataFile.getName());
 
            } catch (IOException e){
                e.printStackTrace();
@@ -126,27 +129,40 @@ public class FileAccessor {
      * Returns all keys in memory from a specific path
      * Set identical to true if you want to include the path in the set
      * */
-    public Set<String> getKeys (String path, boolean identical) {
+    public Set<String> getKeys (String path, boolean identical, boolean singleLevel) {
         Set<String> allKeys = data.getKeys(true);
         Set<String> output = new HashSet<String>();
 
-        if (identical) {
-            for (String key : allKeys) {
-                if (key.contains(path)) {
+        System.out.println(allKeys);
+
+        //Put them all into output, and remove identicals
+        for (String string : allKeys) {
+            if (!identical) {
+                output.add(string.replace(path, ""));
+            } else {
+                output.add(string);
+            }
+        }
+
+        System.out.println(output);
+
+        //Strip all multi level keys, if requested
+        if (singleLevel) {
+            List<String> toRemove = new ArrayList<String>();
+
+            for (String key : output) {
+                if(key.contains(".")){
+                    toRemove.add(key);
+                    key = key.substring(0, key.indexOf("."));
                     output.add(key);
                 }
             }
-        } else {
-            for (String key : allKeys) {
-                if (key.contains(path)) {
-                    if (!key.equals(path)) {
-                        output.add(key.replace(path, ""));
-                    } else {
-                        continue;
-                    }
-                }
-            }
+
+            output.removeAll(toRemove);
         }
+
+        System.out.println(output);
+
         return output;
     }
 }
